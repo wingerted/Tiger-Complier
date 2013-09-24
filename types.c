@@ -62,10 +62,19 @@ Ty_ty Ty_Name (S_symbol sym, Ty_ty ty)
 
 Ty_tyList Ty_TyList (Ty_ty head, Ty_tyList tail)
 {
+  Ty_fieldList headList = tail;
   Ty_tyList p = checked_malloc (sizeof (*p));
   p->head = head;
-  p->tail = tail;
-  return p;
+  p->tail = NULL;
+  if (tail == NULL) {
+    return p;
+  } else {
+    while (tail->tail) {
+      tail = tail->tail;
+    }
+  }
+  tail->tail = p;
+  return headList;
 }
 
 Ty_field Ty_Field (S_symbol name, Ty_ty ty)
@@ -78,10 +87,19 @@ Ty_field Ty_Field (S_symbol name, Ty_ty ty)
 
 Ty_fieldList Ty_FieldList (Ty_field head, Ty_fieldList tail)
 {
+  Ty_fieldList headList = tail;
   Ty_fieldList p = checked_malloc (sizeof (*p));
   p->head = head;
-  p->tail = tail;
-  return p;
+  p->tail = NULL;
+  if (tail == NULL) {
+    return p;
+  } else {
+    while (tail->tail) {
+      tail = tail->tail;
+    }
+  }
+  tail->tail = p;
+  return headList;
 }
 
 /* printing functions - used for debugging */

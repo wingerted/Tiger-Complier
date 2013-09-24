@@ -80,7 +80,7 @@ void yyerror(char *s) {
 %%
 
 decList	:	dec {$$ = A_DecList($1, NULL);}
-	|	decList dec {$$ = A_DecList($2, $1);}
+	|	dec decList {$$ = A_DecList($1, $2);}
 	;
 
 dec	:	nametyList {$$ = A_TypeDec(EM_tokPos, $1);}
@@ -89,11 +89,11 @@ dec	:	nametyList {$$ = A_TypeDec(EM_tokPos, $1);}
 	;
 
 nametyList	:	namety {$$ = A_NametyList($1, NULL);}
-		|	nametyList namety {$$ = A_NametyList($2, $1);}
+		|	namety nametyList {$$ = A_NametyList($1, $2);}
 		;
 
 fundecList	:	fundec {$$ = A_FundecList($1, NULL);}
-		|	fundecList fundec {$$ = A_FundecList($2, $1);}
+		|	fundec fundecList {$$ = A_FundecList($1, $2);}
 		;
 
 namety	:	TYPE ID EQ ty {$$ = A_Namety(S_Symbol($2), $4);}
@@ -106,7 +106,7 @@ ty	:	ID {$$ = A_NameTy(EM_tokPos, S_Symbol($1));}
 
 fieldList	:	{$$ = NULL;}
 		|	field {$$ = A_FieldList($1, NULL);}
-		|	fieldList COMMA field {$$ = A_FieldList($3, $1);}
+		|	field COMMA fieldList {$$ = A_FieldList($1, $3);}
 		;
 
 field	:	ID COLON ID {$$ = A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3));}
@@ -114,7 +114,7 @@ field	:	ID COLON ID {$$ = A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3));}
 
 efieldList	:	{$$ = NULL;}
 		|	efield {$$ = A_EfieldList($1, NULL);}
-		|	efieldList COMMA efield {$$ = A_EfieldList($3, $1);}
+		|	efield COMMA efieldList {$$ = A_EfieldList($1, $3);}
 		;
 
 efield	:	ID EQ exp {$$ = A_Efield(S_Symbol($1), $3);}
